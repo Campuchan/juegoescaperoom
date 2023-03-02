@@ -5,7 +5,6 @@
 
 int victoria = 0;
 int current_level = 0; // keep track of the current level
-char semen;
 
 typedef struct {
   int **data;
@@ -17,10 +16,12 @@ typedef struct {
   int endrow;
 } maze_t;
 
-maze_t *create_maze(int width, int height, char *maze_data, int endcol, int endrow) {
+maze_t *create_maze(int width, int height, char *maze_data, int starcol, int starrow, int endcol, int endrow) {
   maze_t *maze = malloc(sizeof(maze_t));
   maze->width = width;                            // lee el mapa de un string
-  maze->height = height;                          // lo guarda como array de numeros
+  maze->height = height;
+  maze->starcol = starcol;
+  maze->starrow = starrow;                          // lo guarda como array de numeros
   maze->endcol = endcol;
   maze->endrow = endrow;                          // pared es 0, suelo es 1, objetivo es 2
   maze->data = malloc(sizeof(int *) * height);
@@ -87,13 +88,8 @@ int siguientenivel(maze_t *maze, int row, int col) {
   clear();
   mvprintw(10, 32, "NIVEL COMPLETADO!");
   mvprintw(15, 25, "Presiona cualquier tecla para continuar.");
-  const char colact = col + '0';
-  const char rowact = row + '0';
   refresh();
   getch();
-
-  free(maze->data);
-  free(maze);
   
   return 0;
 }
@@ -129,7 +125,7 @@ int main() {
         endrow = 8;
         endcol = 6;
         starrow = 1;
-        starcol = 1;
+        starcol = 5;
         break;
 
       case 2:
@@ -146,11 +142,11 @@ int main() {
         endrow = 8;
         endcol = 18;
         starrow = 2;
-        starcol = 2;
+        starcol = 5;
         break;
     }
 
-    maze_t *maze = create_maze(width, height, maze_data, endcol, endrow);
+    maze_t *maze = create_maze(width, height, maze_data, starcol, starrow , endcol, endrow);
 
     while (victoria != 1) {
       clear();
@@ -168,7 +164,7 @@ int main() {
     }
   }
 
-  endwi89n();
+  endwin();
   return 0;
 }
 
